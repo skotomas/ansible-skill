@@ -1,0 +1,8 @@
+# Variables and facts
+
+Keep each setting in one clear source when practical. Put overridable role inputs in defaults and environment values in inventory group_vars/host_vars. Role vars have higher precedence than inventory variables; they are not protected or immutable.
+Abbreviated precedence, low to high: role defaults → inventory group vars (all → children) → inventory host vars → inventory playbook-directory group_vars/host_vars (same order, wins over inventory-directory equivalents) → facts/cached set_fact → play vars/vars_prompt/vars_files → role vars → block vars → task vars → include_vars → registered vars/set_fact → role params → include params → extra vars (-e). Inventory and playbook directory sources have further ordering; consult the full official table for conflicts. When two values unexpectedly fight, the more specific scope wins and extra vars beat everything: resolve precedence before suspecting the task.
+Play vars are play-scoped and are not automatically available through hostvars. Gather/cache another host's facts before referencing them. Registered result shape depends on the module, loops, failures and skipped tasks; inspect only non-sensitive fields.
+Use bracket notation for dictionary keys conflicting with methods. Test actual Jinja types and booleans on the selected core version; review porting guides on upgrades. set_fact cacheable creates values with distinct current-run and cached precedence; avoid caching secrets.
+
+Reference: [official documentation](https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_variables.html). Verify against the selected installed versions.
